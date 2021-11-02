@@ -3,11 +3,11 @@ from setuptools import setup, find_packages
 with open("README.md", "r") as readme_file:
     readme = readme_file.read()
 
-requirements = []
+requirements = ['copy']
 
 setup(
     name="snspec",
-    version="0.0.1",
+    version="0.0.6",
     author="Jiawen Yang",
     author_email="jiawen.yang096@gmail.com",
     description="A package to analyze Type Ia supernova spectra.",
