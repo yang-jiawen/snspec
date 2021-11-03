@@ -7,7 +7,7 @@ requirements = []
 
 setup(
     name="snspec",
-    version="0.0.9",
+    version="0.0.10",
     author="Jiawen Yang",
     author_email="jiawen.yang096@gmail.com",
     description="A package to analyze Type Ia supernova spectra.",
