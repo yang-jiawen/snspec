@@ -1,6 +1,6 @@
 
 import numpy as np
-from copy import copy
+import copy
 from scipy.stats import binned_statistic
 
 
@@ -20,6 +20,12 @@ class spectrum:
         self.flux = np.array(flux)
         self.smoothed_flux = None
         self.smoothed_order = None
+        # wavelength and flux at endpoints of continuum
+        self.cont_min = None
+        self.cont_max = None
+        # wavelength range used to find endpoints continuum
+        self.cont_min_range = None
+        self.cont_max_range = None
         return
 
     def smooth(self, order=4):
@@ -34,23 +40,27 @@ class spectrum:
         self.smoothed_order = order
         return
 
-    # def find_continuum(self, min_range=[5820, 6000], max_range=[6200, 6540], binsize=40):
-    #     """[summary]
+    def find_continuum(self, min_range=[5820, 6000], max_range=[6200, 6540],
+                       binsize=40):
+        """Given wavelength ranges, find the endpoints of the continuum.
 
-    #     Args:
-    #         min_range (list, optional): [description]. Defaults to [5820, 6000].
-    #         max_range (list, optional): [description]. Defaults to [6200, 6540].
-    #         binsize (int, optional): [description]. Defaults to 40.
-    #     """
-    #     min_wl, min_fl = find_wl_at_max_fl(
-    #         self, wave_range=min_range, binsize=binsize)
-    #     max_wl, max_fl = find_wl_at_max_fl(
-    #         self, wave_range=max_range, binsize=binsize)
-    #     self.cont_min = [min_wl, min_fl]
-    #     self.cont_max = [max_wl, max_fl]
-    #     self.cont_min_range = min_range
-    #     self.cont_max_range = max_range
-    #     return
+        Args:
+            min_range (list, optional): List of length 2, used to determine
+             the blue endpoint. Defaults to [5820, 6000](restframe Si II 6355).
+            max_range (list, optional): List of length 2, used to determine
+             the red endpoint. Defaults to [6200, 6540] (restframe Si II 6355).
+            binsize (int, optional): binsize used in binning to find
+            maximum (AA). Defaults to 40 AA.
+        """
+        min_wl, min_fl = find_wl_at_max_fl(
+            self, wave_range=min_range, binsize=binsize)
+        max_wl, max_fl = find_wl_at_max_fl(
+            self, wave_range=max_range, binsize=binsize)
+        self.cont_min = [min_wl, min_fl]
+        self.cont_max = [max_wl, max_fl]
+        self.cont_min_range = min_range
+        self.cont_max_range = max_range
+        return
 
 
 def atrouswt(input_spec, j, wavelet=[1.0/16, 1.0/4, 3.0/8, 1.0/4, 1.0/16]):
